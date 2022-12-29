@@ -1,0 +1,7 @@
+<div class="container" style="max-width: 750px;">
+    <div class="row col-12 p-0 m-0">
+        <div *ngFor="let card of list" class="col-6 m-0 p-2">
+            <app-menu [name]="card?.name" (clickEmmiter)="receiverClick(card?.route)"></app-menu>
+        </div>
+    </div>
+</div>

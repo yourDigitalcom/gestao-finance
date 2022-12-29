@@ -1,0 +1,21 @@
+<div class="col">
+    <a class="w-100" (click)="goBack()">
+        <span></span>
+        <span>Voltar</span>
+    </a>
+</div>
+
+<hr>
+
+<div class="lista-marcas">
+    <lista></lista>
+</div>
+
+<div class="lista-produtos">
+    <div *ngFor="let t of products">
+        <p>{{t.marca}}</p>
+    </div>
+    <div *ngFor="let produto of products">
+        <app-cards-products [products]="produto"></app-cards-products>
+    </div>
+</div>
