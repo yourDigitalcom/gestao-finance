@@ -18,6 +18,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CardsProductsComponent } from './components/cards-products/cards-products.component';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
+import { CardSelectComponent } from './components/card-select/card-select.component';
+
+import { MatIconModule } from '@angular/material/icon';
+import { AddButtonComponent } from './components/add-button/add-button.component';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +33,9 @@ import { HomeComponent } from './pages/home/home.component';
     CervejasComponent,
     NavbarComponent,
     CardsProductsComponent,
-    HomeComponent
+    HomeComponent,
+    CardSelectComponent,
+    AddButtonComponent
   ],
   imports: [
     HttpClientModule,
@@ -43,6 +50,9 @@ import { HomeComponent } from './pages/home/home.component';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
+
+
+    MatIconModule
   ],
   providers: [
     HttpClient,

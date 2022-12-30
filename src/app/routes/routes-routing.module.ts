@@ -2,20 +2,21 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CardapioComponent } from '../pages/cardapio/cardapio.component';
 import { CervejasComponent } from '../pages/cervejas/cervejas.component';
+import { HomeComponent } from '../pages/home/home.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: CardapioComponent
+    component: HomeComponent
   },
   {
-    path:'cardapio',
-    component: CardapioComponent
+    path:'**',
+    component: HomeComponent
   },
   {
-    path:'cervejas',
-    component: CervejasComponent
+    path:'home',
+    component: HomeComponent
   },
 ];
 

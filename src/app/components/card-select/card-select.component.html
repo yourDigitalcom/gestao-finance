@@ -1,0 +1,17 @@
+<button class="btn border w-100" [style.background-color]="'#fff'">
+
+    <div class="d-flex w-100 p-0">
+        <div class="col-10 text-start p-0">
+            <div> {{ title }} </div>
+            <div *ngIf="subTitle" class="sub-title">
+                <span class="fw-light" > {{ subTitle.name }}: </span>
+                <span class="fw-light"> {{ subTitle.value }} </span>
+                <span *ngIf="subTitleSecond" class="fw-light"> {{ subTitleSecond.name }}: </span>
+                <span *ngIf="subTitleSecond" class="fw-light"> {{ subTitleSecond.value }} </span>
+            </div>
+        </div>
+        <div class="col-2 h-100 text-end p-0 content-icon">
+            <mat-icon [style.color]="'grey'">arrow_forward_ios</mat-icon>
+        </div>
+    </div>
+</button>
