@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+
+export interface iCardSelect {
+  id: number;
+  title: string;
+  subTitle: iSubTitle
+}
 export interface iSubTitle {
   name: string;
-  value: string;
+  value: number;
 }
 
 @Component({
@@ -12,13 +18,8 @@ export interface iSubTitle {
 })
 export class CardSelectComponent {
 
-  public title: string = 'Novembro';
-  public subTitle: iSubTitle = {
-    name: 'Gastos',
-    value: 'R$ 4.000,00'
-  };
-  public subTitleSecond: iSubTitle = {
-    name: 'Gastos',
-    value: 'R$ 4.000,00'
-  };
+  @Input() public content: iCardSelect;
+
+  @Output() public selected: EventEmitter<any> = new EventEmitter();
+
 }

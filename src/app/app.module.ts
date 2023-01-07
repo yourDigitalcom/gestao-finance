@@ -22,6 +22,8 @@ import { CardSelectComponent } from './components/card-select/card-select.compon
 
 import { MatIconModule } from '@angular/material/icon';
 import { AddButtonComponent } from './components/add-button/add-button.component';
+import { GastosService } from './services/service.service';
+import { SessionService } from './services/session/session.service';
 
 
 @NgModule({
@@ -56,6 +58,8 @@ import { AddButtonComponent } from './components/add-button/add-button.component
   ],
   providers: [
     HttpClient,
+    GastosService,
+    SessionService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

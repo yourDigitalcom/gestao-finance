@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilService } from 'src/app/services/utils/util.service';
+import { UtilService } from '../../services/utils/util.service';
 
 @Component({
   selector: 'app-cardapio',

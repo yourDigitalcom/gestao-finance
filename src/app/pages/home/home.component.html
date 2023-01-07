@@ -1,7 +1,7 @@
 <p>home works!</p>
 
 
-<card-select></card-select>
+<card-select *ngFor="let item of listaGastos" [content]="item" (selected)="cardSelected($event)"></card-select>
 
 <div class="add-button-footer">
     <add-button (clicked)="receiverAddButton()" [fontSize]="50"></add-button>
