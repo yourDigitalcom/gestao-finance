@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { iCardSelect } from '../../components/card-select/card-select.component';
 import { SessionService } from '../../services/session/session.service';
 import { GastosModel } from '../../models/gastos.model';
 import { GastosService } from '../../services/service.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +15,26 @@ export class HomeComponent implements OnInit {
 
   public listaGastos: Array<iCardSelect>;
 
+  public form: FormGroup;
+
   public count = 2;
+
+  public value;
+
+  public picker;
+
+  public inputDate: string;
+  public datePicker: string;
+
+  public openModal: boolean = false;
+  public openPicker: boolean = false;
+  public showInputDate: boolean = false;
+
+  public selectedToday: boolean = false;
+  public seletedYesterday: boolean = false;
+  public chipSelected: number;
+
+  public disabledButtonSave: boolean = true;
 
   public nomeMeses = [
     { mes: '01', name: 'janeiro' },
@@ -31,46 +52,31 @@ export class HomeComponent implements OnInit {
   ];
 
   constructor(
+    private readonly _formBuilder: FormBuilder,
     private readonly _gastosService: GastosService,
     private readonly _session: SessionService,
   ) { }
 
+  @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
+
   ngOnInit(): void {
 
-    this.listaGastos = new Array<iCardSelect>()
+    this.form = this._formBuilder.group({
+      currency: [0,
+        [
+          Validators.required,
+          Validators.min(1),
+        ]
+      ],
+    });
 
-    this._gastosService.todosGastos()
-      .subscribe((success: Array<GastosModel>) => {
-
-        success.forEach(gasto => {
-          this._session.idDataBase = gasto.id + 1;
-          const month = this.convertMonthlyToMonth(gasto.monthly);
-
-          if (this.listaGastos.length > 0 && this.isEqualMonth(month)) {
-
-            this.listaGastos.find(value => value.title === month).subTitle.value += gasto.value;
-
-          } else {
-            
-            this.listaGastos.push({
-              id: gasto.id,
-              title: this.convertMonthlyToMonth(gasto.monthly),
-              subTitle: {
-                name: 'Gasto total',
-                value: gasto.value
-              }
-            })
-          }
-        })
-
-      }, error => {
-        console.log('error');
-      })
-
+    this.todosGastos();
   }
 
   public receiverAddButton(): void {
     console.log('receiverAddButton');
+
+    this.openModal = true;
 
     const request: GastosModel = {
       id: this._session.idDataBase,
@@ -79,19 +85,54 @@ export class HomeComponent implements OnInit {
       value: 1500.00
     }
 
-    this._gastosService.publicarGastos(request)
-      .subscribe(sucess => {
-        this.ngOnInit();
-      });
+    // this._gastosService.publicarGastos(request)
+    //   .subscribe(sucess => {
+    //     this.ngOnInit();
+    //   });
   }
 
   public cardSelected(value: string): void {
-    if(value != this._session.monthSelected) {
+    if (value != this._session.monthSelected) {
       console.log('cardSelected', value);
-  
+
       this._session.monthSelected = value;
     }
-    
+
+  }
+
+  public changeChip(value: number): void {
+    this.chipSelected = value;
+    switch (this.chipSelected) {
+      case 0:
+        this.selectedToday = true;
+        this.seletedYesterday = false;
+        this.showInputDate = false;
+        this.inputDate = new Date().toLocaleDateString();
+        break;
+      case 1:
+        this.selectedToday = false;
+        this.seletedYesterday = true;
+        this.showInputDate = false;
+        const today = new Date();
+        const yesterday = new Date();
+        const date = yesterday.setDate(today.getDate() - 1)
+        this.inputDate = new Date(date).toLocaleDateString();
+        break;
+      case 2:
+        this.selectedToday = false;
+        this.seletedYesterday = false;
+        this.showInputDate = true;
+        break;
+      default:
+        break;
+    }
+    console.log('changeChip');
+  }
+
+  public modelChanged(): void {
+    const date = new Date(this.datePicker);
+    const today = date.setDate(date.getDate() + 1)
+    this.inputDate = new Date(today).toLocaleDateString();
   }
 
   private convertMonthlyToMonth(monthly: string): string {
@@ -106,6 +147,38 @@ export class HomeComponent implements OnInit {
   private isEqualMonth(month: string): boolean {
     const value = this.listaGastos.find(value => value.title === month);
     return value && value.title === month;
+  }
+
+  private todosGastos(): void {
+    this.listaGastos = new Array<iCardSelect>()
+
+    this._gastosService.todosGastos()
+      .subscribe((success: Array<GastosModel>) => {
+
+        success.forEach(gasto => {
+          this._session.idDataBase = gasto.id + 1;
+          const month = this.convertMonthlyToMonth(gasto.monthly);
+
+          if (this.listaGastos.length > 0 && this.isEqualMonth(month)) {
+
+            this.listaGastos.find(value => value.title === month).subTitle.value += gasto.value;
+
+          } else {
+
+            this.listaGastos.push({
+              id: gasto.id,
+              title: this.convertMonthlyToMonth(gasto.monthly),
+              subTitle: {
+                name: 'Gasto total',
+                value: gasto.value
+              }
+            })
+          }
+        })
+
+      }, error => {
+        console.log('error');
+      })
   }
 
 }

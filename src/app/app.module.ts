@@ -13,17 +13,32 @@ import { CardComponent } from './components/menu/menu.component';
 import { CardapioComponent } from './pages/cardapio/cardapio.component';
 import { CervejasComponent } from './pages/cervejas/cervejas.component';
 import { environment } from '../environments/environment';
-import { MatTabsModule } from '@angular/material/tabs';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CardsProductsComponent } from './components/cards-products/cards-products.component';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
 import { CardSelectComponent } from './components/card-select/card-select.component';
 
-import { MatIconModule } from '@angular/material/icon';
+
 import { AddButtonComponent } from './components/add-button/add-button.component';
 import { GastosService } from './services/service.service';
 import { SessionService } from './services/session/session.service';
+import { NewModalShareComponent } from './components/modal-share/new-modal-share.component';
+import { NewBodyShareComponent } from './components/modal-share/new-body-share.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "right",
+  allowNegative: true,
+  decimal: ",",
+  precision: 2,
+  prefix: "R$ ",
+  suffix: "",
+  thousands: "."
+};
 
 
 @NgModule({
@@ -37,29 +52,32 @@ import { SessionService } from './services/session/session.service';
     CardsProductsComponent,
     HomeComponent,
     CardSelectComponent,
-    AddButtonComponent
+    AddButtonComponent,
+    NewBodyShareComponent,
+    NewModalShareComponent
   ],
   imports: [
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule,
     BrowserModule,
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     RoutesRoutingModule,
+    CurrencyMaskModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-
-
-    MatIconModule
+    MaterialModule,
   ],
   providers: [
     HttpClient,
     GastosService,
-    SessionService
+    SessionService,
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
